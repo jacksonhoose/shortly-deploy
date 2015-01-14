@@ -3,6 +3,18 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      dist: {
+        src: [
+          'public/client/app.js',
+          'public/client/link.js',
+          'public/client/links.js',
+          'public/client/linkView.js',
+          'public/client/linksView.js',
+          'public/client/createLinkView.js',
+          'public/client/router.js'
+        ],
+        dest: 'public/dist/app.js'
+      }
     },
 
     mochaTest: {
@@ -21,14 +33,25 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      dist: {
+        files: {
+          'public/dist/app.min.js': ['public/dist/app.js']
+        }
+      }
     },
 
     jshint: {
       files: [
-        // Add filespec list here
+        'public/client/app.js',
+        'public/client/link.js',
+        'public/client/links.js',
+        'public/client/linkView.js',
+        'public/client/linksView.js',
+        'public/client/createLinkView.js',
+        'public/client/router.js'
       ],
       options: {
-        force: 'true',
+        force: 'false',
         jshintrc: '.jshintrc',
         ignores: [
           'public/lib/**/*.js',
@@ -94,6 +117,10 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'jshint',
+    'mochaTest',
+    'concat:dist',
+    'uglify:dist'
   ]);
 
   grunt.registerTask('upload', function(n) {
